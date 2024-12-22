@@ -3,7 +3,7 @@
 
 {
     'name': 'Get SMTP settings from environment variables',
-    'version': '15.0.1.0.1',
+    'version': '17.0.1.0.1',
     'author': 'Ross Golder',
     'website': 'https://golder.org/',
     'license': 'AGPL-3',
