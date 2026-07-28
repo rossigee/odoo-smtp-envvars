@@ -13,7 +13,7 @@ class IrMailServer(models.Model):
     _inherit = "ir.mail_server"
 
     def connect(self, host=None, port=None, user=None, password=None, encryption=None,
-                smtp_debug=False, mail_server_id=None):
+                smtp_debug=False, mail_server_id=None, smtp_from=None):
         if 'SMTP_HOST' not in os.environ:
             raise UserError("Missing 'SMTP_HOST' environment variable")
         smtp_host = os.environ['SMTP_HOST']
@@ -22,12 +22,14 @@ class IrMailServer(models.Model):
         smtp_password = os.getenv('SMTP_PASSWORD', None)
         smtp_encryption = os.getenv('SMTP_ENCRYPTION', None)
         smtp_debug = int(os.getenv('SMTP_DEBUG', "0"))
+        
         return super().connect(
-            smtp_host,
-            smtp_port,
-            smtp_user,
-            smtp_password,
-            smtp_encryption,
-            smtp_debug,
-            None,
+            host=smtp_host,
+            port=smtp_port,
+            user=smtp_user,
+            password=smtp_password,
+            encryption=smtp_encryption,
+            smtp_from=smtp_from,
+            smtp_debug=smtp_debug,
+            mail_server_id=None,
         )
