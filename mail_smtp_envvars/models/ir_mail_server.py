@@ -12,13 +12,11 @@ class IrMailServer(models.Model):
 
     _inherit = "ir.mail_server"
 
-    # TODO(18.0-port): the positional super().connect() call below (host, port, user,
-    # password, encryption, smtp_debug, None) matches the signature this override was
-    # written against. The 18.0 ir.mail_server.connect() signature could not be verified:
-    # no core Odoo source and no 18.0 override of ir.mail_server.connect exists in the
-    # OpenUpgrade or OCA 18.0 worktrees. Confirm the parameter list in core mail/models/ir_mail_server.py.
+    # Signature matches ir.mail_server.connect() in Odoo 18.0 (base/models/ir_mail_server.py).
+    # Arguments are forwarded by keyword so they cannot shift position.
     def connect(self, host=None, port=None, user=None, password=None, encryption=None,
-                smtp_debug=False, mail_server_id=None, smtp_from=None):
+                smtp_from=None, ssl_certificate=None, ssl_private_key=None, smtp_debug=False,
+                mail_server_id=None, allow_archived=False):
         if 'SMTP_HOST' not in os.environ:
             raise UserError("Missing 'SMTP_HOST' environment variable")
         smtp_host = os.environ['SMTP_HOST']
@@ -27,7 +25,6 @@ class IrMailServer(models.Model):
         smtp_password = os.getenv('SMTP_PASSWORD', None)
         smtp_encryption = os.getenv('SMTP_ENCRYPTION', None)
         smtp_debug = int(os.getenv('SMTP_DEBUG', "0"))
-        
         return super().connect(
             host=smtp_host,
             port=smtp_port,
@@ -35,6 +32,9 @@ class IrMailServer(models.Model):
             password=smtp_password,
             encryption=smtp_encryption,
             smtp_from=smtp_from,
+            ssl_certificate=ssl_certificate,
+            ssl_private_key=ssl_private_key,
             smtp_debug=smtp_debug,
-            mail_server_id=None,
+            mail_server_id=mail_server_id,
+            allow_archived=allow_archived,
         )
