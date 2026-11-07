@@ -12,6 +12,11 @@ class IrMailServer(models.Model):
 
     _inherit = "ir.mail_server"
 
+    # TODO(18.0-port): the positional super().connect() call below (host, port, user,
+    # password, encryption, smtp_debug, None) matches the signature this override was
+    # written against. The 18.0 ir.mail_server.connect() signature could not be verified:
+    # no core Odoo source and no 18.0 override of ir.mail_server.connect exists in the
+    # OpenUpgrade or OCA 18.0 worktrees. Confirm the parameter list in core mail/models/ir_mail_server.py.
     def connect(self, host=None, port=None, user=None, password=None, encryption=None,
                 smtp_debug=False, mail_server_id=None, smtp_from=None):
         if 'SMTP_HOST' not in os.environ:
